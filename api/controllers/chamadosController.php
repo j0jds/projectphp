@@ -20,6 +20,23 @@ class ChamadosController {
         echo json_encode($chamados);
     }
 
+    // Listar um chamado específico por ID
+public function listarChamadoPorId($id) {
+    $query = "SELECT * FROM chamados WHERE id = :id";
+    $stmt = $this->conn->prepare($query);
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+
+    $chamado = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($chamado) {
+        echo json_encode($chamado);
+    } else {
+        echo json_encode(['message' => 'Chamado não encontrado']);
+    }
+}
+
+
     // Cria um chamado
     public function criarChamado($titulo, $descricao, $status = 'Aberto') {
         $query = "INSERT INTO chamados (titulo, descricao, status) VALUES (:titulo, :descricao, :status)";
